@@ -7,6 +7,25 @@ import BtmNav from './BtmNav'
 import AppBar from './AppBar'
 import './style.scss'
 
+function ShowContent({nav}: {nav: number}) {
+  let body = null;
+  if (nav == 0) {
+    body = <h1>content 1 test</h1>
+  } else if (nav == 1) {
+    body =  <h1>content 2 test</h1>
+  } else if (nav == 2) {
+    body = <h1>content 3 test</h1>
+  }
+
+  return (
+    <div className='content'>
+      <Container maxWidth={false} fixed={false}>
+        {body}
+      </Container>
+    </div>
+  )
+}
+
 export default function App() {
   const [bottomNav, setBottomNav] = React.useState(0);
 
@@ -14,9 +33,9 @@ export default function App() {
   return (
     <Container maxWidth="sm" style={{'paddingLeft': 0, 'paddingRight': 0}}>
         <AppBar />
-        <div className="content">
 
-        </div>
+        <ShowContent nav={bottomNav} />
+
         <BtmNav setValue={setBottomNav} value={bottomNav} />
     </Container>
   );
