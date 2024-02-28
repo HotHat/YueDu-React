@@ -9,9 +9,13 @@
   overflow: scroll;
 }
 
+.content h2 {
+  text-align: center;
+}
+
 .content p {
   /* word-spacing: 1.5em; */
   line-height: 34px;
   font-size: 1.25em;
-  letter-spacing: 0.2em;
+  letter-spacing: 1px;
 }
