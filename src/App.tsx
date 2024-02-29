@@ -15,6 +15,7 @@ import BtmNav from './BtmNav'
 import AppBar from './AppBar'
 import './style.scss'
 import axios from 'axios';
+import useContainerScroll from './useContainerScroll'
 
 function Article({chapters}: any) {
   return (
@@ -37,53 +38,110 @@ function Chapter({title, content}: any) {
   )
 }
 
+type ChapterType = {
+  title: string,
+  content: Array<string>
+}
+
 function ShowContent({nav}: {nav: number}) {
   let body = null;
-  if (nav == 0) {
-    body = <Article chapters={[
-      {
+  
+
+  let [chapterList, setChapterList] = React.useState<Array<ChapterType>>([])
+  // let [isLoading, setLoading] = React.useState(false)
+  const [loading, setLoading] = React.useState(false);
+  // let loadingRef = React.useRef(loading)
+  const { reachBottom } = useContainerScroll('.content');
+
+
+
+  let chapter = {
         title: '这里是很长的标题哦~~1111',
         content: [
           '帮助兵哥净化掉堕落圣杯的污染后，兄弟俩坐在冰窟中，张元清讲诉起复活后的经历，从三道山娘娘庙的佘灵隧道开始，一直讲到杀死星辰之主，开启第三大区。 如果是以前的张元清，肯定添油加醋，为自己的经历添加一些奇幻色彩，比如棺中苏醒的三道山娘娘，被他魅力折服，甘愿当一个护道者，只为太阳之主将来能垂青一二。 比如大名鼎鼎钱公子，初见他时，便瞧出他是人中龙凤，当即提出要桃园结义，做他的天使投资人。 又比如艳名远播的花公子，在见到他之后，就哭着跪下说：我今天才知道什么是撩妹高手，我大开眼界，大开眼界，公若不弃，钧愿拜为义父。 黄公子说：滚，他是我的义父！',
           '等等。',
           '但公正威严的太阳之主，实事求是，不添油不加醋，平铺直叙。 即便如此，兵哥仍是听的大为震撼，感慨道：“你的这次经历，可比魔君时期精彩多了。嗯，朋友也多了。不过嘛……” 他皱起眉头说：“你的那些风流债，怎么办？” 太阳之主言简意赅的回复：“纳入后宫。” 是因为你那半年来的频率和长度有没征服他们吗。',
         ]
-      },
-      {
-        title: '这里是很长的标题哦~~22',
-        content: [
-          '帮助兵哥净化掉堕落圣杯的污染后，兄弟俩坐在冰窟中，张元清讲诉起复活后的经历，从三道山娘娘庙的佘灵隧道开始，一直讲到杀死星辰之主，开启第三大区。 如果是以前的张元清，肯定添油加醋，为自己的经历添加一些奇幻色彩，比如棺中苏醒的三道山娘娘，被他魅力折服，甘愿当一个护道者，只为太阳之主将来能垂青一二。 比如大名鼎鼎钱公子，初见他时，便瞧出他是人中龙凤，当即提出要桃园结义，做他的天使投资人。 又比如艳名远播的花公子，在见到他之后，就哭着跪下说：我今天才知道什么是撩妹高手，我大开眼界，大开眼界，公若不弃，钧愿拜为义父。 黄公子说：滚，他是我的义父！',
-          '等等。',
-          '但公正威严的太阳之主，实事求是，不添油不加醋，平铺直叙。 即便如此，兵哥仍是听的大为震撼，感慨道：“你的这次经历，可比魔君时期精彩多了。嗯，朋友也多了。不过嘛……” 他皱起眉头说：“你的那些风流债，怎么办？” 太阳之主言简意赅的回复：“纳入后宫。” 是因为你那半年来的频率和长度有没征服他们吗。',
-        ]
-      },
-    ]}
-    />
+      }
+
+  // console.log('11:', chapterList)
+  // setChapterList([
+  //   ...chapterList,
+  //   chapter
+  // ])
+  // console.log('22:', chapterList)
+
+  if (nav == 0) {
+    body = <Article chapters={chapterList} />
         
   } else if (nav == 1) {
     body =  <h1>content 2 test</h1>
   } else if (nav == 2) {
     body = <h1>content 3 test</h1>
   }
+
+  let fetchNextPage = () => {
+    if (!loading ) {
+      // pageNum += 1;
+      // .... fetch page data ...
+      axios.get('https://api.npms.io/v2/search?q=react')
+      .then((response) => {
+        console.log('resp loading: ', loading)
+        setChapterList([
+          ...chapterList,
+          chapter
+        ])
+        console.log(chapterList)
+      }).finally(() => {
+        setLoading(false)
+        console.log('finally loading: ', loading)
+      })
+    }
+  }
+
   
 
   React.useEffect(() => {
-    let ct = document.getElementById('scrollContent')
-    if (ct) {
-      ct.addEventListener('scroll', (event: any) => {
-        // console.log(ct.scrollHeight)
-        // console.log(ct.scrollTop)
-        // console.log(ct.clientHeight)
-        if (ct.scrollHeight - ct.scrollTop - ct.clientHeight < 50) {
-          console.log('scroll to the bottom')
-          
-        }
-      })
+
+    // let handler = (event: any) => {
+      // let ct = document.getElementById('scrollContent')
+      // console.log(ct.scrollHeight)
+      // console.log(ct.scrollTop)
+      // console.log(ct.clientHeight)
+      // console.log('loading: ', isLoading)
+      // if (ct.scrollHeight - ct.scrollTop - ct.clientHeight < 10 && !isLoading) {
+      //   setLoading(true);
+
+      //   console.log('scroll to the bottom')
+        
+      //   axios.get('https://api.npms.io/v2/search?q=react')
+      //         .then((response) => {
+      //           console.log('resp loading: ', isLoading)
+      //           setChapterList([
+      //             ...chapterList,
+      //             chapter
+      //           ])
+      //           console.log(chapterList)
+      //         }).finally(() => {
+      //           setLoading(false)
+      //           console.log('finally loading: ', isLoading)
+      //         })
+      // }
+    // }
+
+
+    // let ct = document.getElementById('scrollContent')
+    // ct?.addEventListener('scroll', handler)
+    
+    // return () => {ct?.removeEventListener('scroll', handler)}
+
+    if ((reachBottom && !loading) || chapterList.length == 0) {
+      fetchNextPage();
     }
 
-  }, [])
+  }, [reachBottom, chapterList])
   
-  console.log('add scroll event listener')
+  // console.log('add scroll event listener')
 
   return (
     <div className='content' id='scrollContent'>
