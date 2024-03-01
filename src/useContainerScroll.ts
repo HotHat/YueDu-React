@@ -2,7 +2,7 @@ import { MutableRefObject, useEffect, useState } from 'react';
 
 interface IContainerScrollOption {
   /** 距离底部多少距离触发触底 */
-  safeBottomheight: number;
+  safeBottomHeight: number;
 }
 
 interface IContainerScrollState {
@@ -12,6 +12,7 @@ interface IContainerScrollState {
   scrollTop: number;
   /** 是否触底 */
   reachBottom: boolean;
+  setReachBottom: (v: boolean) => void;
   /** scroll to top */
   scrollToTop: () => void;
   /** scroll to left */
@@ -31,7 +32,7 @@ export default function useContainerScroll(
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   const [reachBottom, setReachBottom] = useState(false);
-  const { safeBottomheight = 50 } = options || {};
+  const { safeBottomHeight = 50 } = options || {};
 
   function getContainer() {
     let theContainer: HTMLElement|null = null;
@@ -48,7 +49,7 @@ export default function useContainerScroll(
     const theContainer = getContainer();
     setX(theContainer.scrollLeft);
     setY(theContainer.scrollTop);
-    setReachBottom(theContainer.scrollTop + theContainer.offsetHeight >= theContainer.scrollHeight - safeBottomheight);
+    setReachBottom(theContainer.scrollTop + theContainer.offsetHeight >= theContainer.scrollHeight - safeBottomHeight);
   }
 
   function resetScroll(type: 'top' | 'left' = 'top') {
@@ -82,6 +83,7 @@ export default function useContainerScroll(
     scrollLeft: x,
     scrollTop: y,
     reachBottom,
+		setReachBottom,
     scrollToTop: () => {
       resetScroll('top');
     },
