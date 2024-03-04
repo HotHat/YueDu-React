@@ -11,11 +11,12 @@
   "dependencies": {
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
-    "@mui/icons-material": "latest",
-    "@mui/material": "latest",
+    "@mui/icons-material": "^5.15.11",
+    "@mui/material": "^5.15.11",
     "axios": "^1.6.7",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-material-ui-carousel": "^3.4.2"
   },
   "devDependencies": {
     "@types/react": "latest",

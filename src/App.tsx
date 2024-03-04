@@ -16,6 +16,7 @@ import AppBar from './AppBar'
 import './style.scss'
 import axios from 'axios';
 import useContainerScroll from './useContainerScroll'
+import IndexPage from './pages/IndexPage'
 
 function Article({chapters}: any) {
   return (
@@ -94,6 +95,7 @@ function ArticleShow({page = 0}) {
   return <Article chapters={chapterList} />
 }
 
+
 function ShowContent({nav}: {nav: number}) {
   let body = null;
 
@@ -101,7 +103,7 @@ function ShowContent({nav}: {nav: number}) {
     body = <ArticleShow page={0} />
         
   } else if (nav == 1) {
-    body =  <h1>content 2 test</h1>
+    body =  <IndexPage />
   } else if (nav == 2) {
     body = <h1>content 3 test</h1>
   }
@@ -118,7 +120,7 @@ function ShowContent({nav}: {nav: number}) {
 }
 
 export default function App() {
-  const [bottomNav, setBottomNav] = React.useState(0);
+  const [bottomNav, setBottomNav] = React.useState(1);
   const [drawerState, setDrawerState] = React.useState(false)
 
   const toggleDrawer = (open: boolean) => (event: any) => {

@@ -9,6 +9,11 @@
   overflow: scroll;
 }
 
+.content .MuiContainer-root {
+  padding-left: 0; 
+  padding-right: 0;
+}
+
 .content h2 {
   text-align: center;
 }
@@ -19,3 +24,4 @@
   font-size: 1.25em;
   letter-spacing: 1px;
 }
+
