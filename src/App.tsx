@@ -17,6 +17,7 @@ import './style.scss'
 import axios from 'axios';
 import useContainerScroll from './useContainerScroll'
 import IndexPage from './pages/IndexPage'
+import BookPage from './pages/BookPage'
 
 function Article({chapters}: any) {
   return (
@@ -105,7 +106,7 @@ function ShowContent({nav}: {nav: number}) {
   } else if (nav == 1) {
     body =  <IndexPage />
   } else if (nav == 2) {
-    body = <h1>content 3 test</h1>
+    body = <BookPage /> 
   }
 
     console.log('add scroll event listener')
