@@ -1,9 +1,13 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
+import Loading from '../components/Loading';
 
 export default function BookPage() {
 	return (
 		<>
+		
+		<Loading isLoading={true} />
+
 		<div className='book-img'>
 			<img style={{height:350, width: "100%"}} src="https://t7.baidu.com/it/u=91673060,7145840&fm=193&f=GIF" />
 		</div>
