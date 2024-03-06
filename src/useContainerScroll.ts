@@ -49,6 +49,11 @@ export default function useContainerScroll(
     const theContainer = getContainer();
     setX(theContainer.scrollLeft);
     setY(theContainer.scrollTop);
+    console.log('scrollTop:', theContainer.scrollTop)
+    console.log('offsetHeight:', theContainer.offsetHeight)
+    console.log('scrollHeight:', theContainer.scrollHeight)
+    console.log('safeBottomHeight:', safeBottomHeight)
+    console.log(theContainer.scrollTop + theContainer.offsetHeight >= theContainer.scrollHeight - safeBottomHeight);
     setReachBottom(theContainer.scrollTop + theContainer.offsetHeight >= theContainer.scrollHeight - safeBottomHeight);
   }
 

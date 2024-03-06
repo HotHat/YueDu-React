@@ -6,10 +6,10 @@ import RestoreIcon from '@mui/icons-material/Restore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-export default function SimpleBottomNavigation({setValue, value}: any) {
+export default function SimpleBottomNavigation({onChange, value}: any) {
   const btmOnChange = (event: any, newValue: any) => {
-    console.log(newValue)
-    setValue(newValue)
+    // console.log(newValue)
+    onChange(newValue)
   }
 
   console.log('touch value: ', value)

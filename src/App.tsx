@@ -20,22 +20,30 @@ import IndexPage from './pages/IndexPage'
 import BookPage from './pages/BookPage'
 
 function Article({chapters}: any) {
+  let content = []
+  for (let [index, val] of chapters.entries()) {
+      let key = 'chapter-' +(index+1);
+      console.log(key)
+      content.push(<Chapter key={key} title={val.title} content={val.content} />)
+  }
   return (
     <>
-    {chapters && chapters.map((chapter:any) => {
-      return <Chapter title={chapter.title} content={chapter.content} />
-    })}
+    {content}
     </>
   )
 }
 
 function Chapter({title, content}: any) {
+  let body = []
+  for (let [index, val] of content.entries()) {
+      let key = 'p-' +(index+1);
+      console.log(key)
+      body.push(<p key={key}>{val}</p>)
+  }
   return (
     <>
     <h2>{title}</h2>
-    {content && content.map((element:string) => {
-      return <p>{element}</p>
-    })}
+    {body}
     </>
   )
 }
@@ -50,7 +58,7 @@ function ArticleShow({page = 0}) {
   // let [isLoading, setLoading] = React.useState(false)
   const [loading, setLoading] = React.useState(false);
   let loadingRef = React.useRef(false)
-  const { reachBottom, setReachBottom } = useContainerScroll('.content');
+  const { reachBottom, setReachBottom } = useContainerScroll('.article-show');
 
   let chapter = {
     title: '这里是很长的标题哦~~1111',
@@ -86,43 +94,78 @@ function ArticleShow({page = 0}) {
   }
 
   React.useEffect(() => {
+    console.log('Article Show component did mount!!!');
     if ((reachBottom && !loadingRef.current) || chapterList.length == 0) {
       fetchNextPage();
+
+      return () => {
+        console.log('Article Show component unmount!!!');
+      }
     }
 
-  }, [reachBottom, chapterList])
+  }, [reachBottom])
   
 
   return <Article chapters={chapterList} />
 }
 
 
-function ShowContent({nav}: {nav: number}) {
-  let body = null;
+interface NavPanelProps {
+  children?: React.ReactNode;
+  value: number;
+  index: number;
+}
 
-  if (nav == 0) {
-    body = <ArticleShow page={0} />
-        
-  } else if (nav == 1) {
-    body =  <IndexPage />
-  } else if (nav == 2) {
-    body = <BookPage /> 
-  }
+function NavPanel(props: NavPanelProps) {
+  const { children, value, index, ...other } = props;
 
-    console.log('add scroll event listener')
+  return (
+    <div
+      role="tabpanel"
+      // hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+      style={value !== index ? {display: 'none'} : {}}
+    >
+      {value === index && ( 
+        <>
+        {children}
+        </>
+      )
+      }
+    </div>
+  );
+}
+
+function ShowContent({nav}: {nav: React.MutableRefObject<number>}) {
+  let indexPage = React.useMemo(() => <IndexPage />, [])
+  let articlePage = React.useMemo(() => <ArticleShow page={0} />, [])
+  let bookPage = React.useMemo(() => <BookPage />, [])
 
   return (
     <div className='content' id='scrollContent'>
-      <Container maxWidth={false} fixed={false}>
-        {body}
-      </Container>
+      <NavPanel value={nav.current} index={0}>
+        {indexPage}
+      </NavPanel>
+
+      <NavPanel value={nav.current} index={1}>
+        {articlePage}
+      </NavPanel>
+
+      <NavPanel value={nav.current} index={2}>
+        {bookPage}
+      </NavPanel>
+
     </div>
   )
 }
 
 export default function App() {
-  const [bottomNav, setBottomNav] = React.useState(1);
+  const navIdex = 0;
+  const [bottomNav, setBottomNav] = React.useState(navIdex);
   const [drawerState, setDrawerState] = React.useState(false)
+  const btnNavRef = React.useRef(navIdex)
 
   const toggleDrawer = (open: boolean) => (event: any) => {
       setDrawerState(open)
@@ -163,6 +206,11 @@ export default function App() {
     </Box>
   );
 
+  const onNavChange = (val: number) => {
+    setBottomNav(val);
+    btnNavRef.current = val
+  }
+
   return (
     <>
     <SwipeableDrawer 
@@ -176,10 +224,43 @@ export default function App() {
     <Container maxWidth="sm" style={{'paddingLeft': 0, 'paddingRight': 0}}>
         <AppBar setState={setDrawerState} />
 
-        <ShowContent nav={bottomNav} />
+      <div className='content' id='scrollContent'>
+        <div
+          role="tabpanel"
+          // hidden={value !== index}
+          id={`simple-tabpanel-0`}
+          className={'simple-tabpanel'}
+          aria-labelledby={`simple-tab-0`}
+          style={bottomNav !== 0 ? {display: 'none'} : {}}
+        >
+          <IndexPage /> 
+        </div>
 
-        <BtmNav setValue={setBottomNav} value={bottomNav} />
+        <div
+          role="tabpanel"
+          // hidden={value !== index}
+          id={`simple-tabpanel-1`}
+          className={'simple-tabpanel article-show'}
+          aria-labelledby={`simple-tab-1`}
+          style={bottomNav !== 1 ? {display: 'none'} : {}}
+        >
+          <ArticleShow /> 
+        </div>
 
+
+        <div
+          role="tabpanel"
+          // hidden={value !== index}
+          id={`simple-tabpanel-2`}
+          className={'simple-tabpanel'}
+          aria-labelledby={`simple-tab-2`}
+          style={bottomNav !== 2 ? {display: 'none'} : {}}
+        >
+          <BookPage /> 
+        </div>
+      </div>
+
+        <BtmNav onChange={onNavChange} value={bottomNav} />
         
     </Container>
     </>
