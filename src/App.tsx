@@ -23,7 +23,7 @@ function Article({chapters}: any) {
   let content = []
   for (let [index, val] of chapters.entries()) {
       let key = 'chapter-' +(index+1);
-      console.log(key)
+      // console.log(key)
       content.push(<Chapter key={key} title={val.title} content={val.content} />)
   }
   return (
@@ -37,7 +37,7 @@ function Chapter({title, content}: any) {
   let body = []
   for (let [index, val] of content.entries()) {
       let key = 'p-' +(index+1);
-      console.log(key)
+      // console.log(key)
       body.push(<p key={key}>{val}</p>)
   }
   return (
@@ -101,11 +101,11 @@ function ArticleShow({page = 0, onClick}: any) {
 
     if ((reachBottom && !loadingRef.current) || chapterList.length == 0) {
       fetchNextPage();
+    }
 
-      return () => {
-        console.log('Article Show component unmount!!!');
-        p?.removeEventListener('click', onClick)
-      }
+    return () => {
+      console.log('Article Show component unmount!!!');
+      p?.removeEventListener('click', onClick)
     }
 
   }, [reachBottom])
@@ -220,18 +220,19 @@ export default function App() {
     btnNavRef.current = val
   }
 
-  const onArticleClick = (event: any) => {
+  const onArticleClick = (event: Event) => {
     console.log('article content click')
-    console.log('show bar nav', showBarNavRef.current)
+    console.log('show bar nav', showBarNavRef.current, showBarNav)
     showBarNavRef.current = !showBarNavRef.current
-    setShowBarNav(showBarNavRef.current)
     setContentClass(showBarNavRef.current ? 'content' : 'content2')
+    setShowBarNav(showBarNavRef.current)
   }
 
-  // React.useEffect(() => {
+  React.useEffect(() => {
       
+    console.log('effect show bar nav', showBarNavRef.current, showBarNav)
 
-  // }, [showBarNav])
+  }, [showBarNav])
 
 
   return (
