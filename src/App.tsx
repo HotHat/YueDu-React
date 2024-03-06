@@ -53,12 +53,13 @@ type ChapterType = {
   content: Array<string>
 }
 
-function ArticleShow({page = 0}) {
+function ArticleShow({page = 0, onClick}: any) {
   let [chapterList, setChapterList] = React.useState<Array<ChapterType>>([])
   // let [isLoading, setLoading] = React.useState(false)
   const [loading, setLoading] = React.useState(false);
   let loadingRef = React.useRef(false)
-  const { reachBottom, setReachBottom } = useContainerScroll('.article-show');
+  let parentClass = '.article-show';
+  const { reachBottom, setReachBottom } = useContainerScroll(parentClass);
 
   let chapter = {
     title: '这里是很长的标题哦~~1111',
@@ -95,11 +96,15 @@ function ArticleShow({page = 0}) {
 
   React.useEffect(() => {
     console.log('Article Show component did mount!!!');
+    let p = document.querySelector(parentClass)
+    p?.addEventListener('click', onClick)
+
     if ((reachBottom && !loadingRef.current) || chapterList.length == 0) {
       fetchNextPage();
 
       return () => {
         console.log('Article Show component unmount!!!');
+        p?.removeEventListener('click', onClick)
       }
     }
 
@@ -166,6 +171,10 @@ export default function App() {
   const [bottomNav, setBottomNav] = React.useState(navIdex);
   const [drawerState, setDrawerState] = React.useState(false)
   const btnNavRef = React.useRef(navIdex)
+  const [showBarNav, setShowBarNav] = React.useState(true)
+  const showBarNavRef = React.useRef(true)
+  const [contentClass, setContentClass] = React.useState('content')
+
 
   const toggleDrawer = (open: boolean) => (event: any) => {
       setDrawerState(open)
@@ -211,6 +220,20 @@ export default function App() {
     btnNavRef.current = val
   }
 
+  const onArticleClick = (event: any) => {
+    console.log('article content click')
+    console.log('show bar nav', showBarNavRef.current)
+    showBarNavRef.current = !showBarNavRef.current
+    setShowBarNav(showBarNavRef.current)
+    setContentClass(showBarNavRef.current ? 'content' : 'content2')
+  }
+
+  // React.useEffect(() => {
+      
+
+  // }, [showBarNav])
+
+
   return (
     <>
     <SwipeableDrawer 
@@ -222,17 +245,17 @@ export default function App() {
         {list()}
     </SwipeableDrawer >
     <Container maxWidth="sm" style={{'paddingLeft': 0, 'paddingRight': 0}}>
-        <AppBar setState={setDrawerState} />
+        {showBarNavRef.current && <AppBar setState={setDrawerState} /> }
 
-      <div className='content' id='scrollContent'>
-        <div
-          role="tabpanel"
-          // hidden={value !== index}
-          id={`simple-tabpanel-0`}
-          className={'simple-tabpanel'}
-          aria-labelledby={`simple-tab-0`}
-          style={bottomNav !== 0 ? {display: 'none'} : {}}
-        >
+        <div className={contentClass} id='scrollContent'>
+          <div
+            role="tabpanel"
+            // hidden={value !== index}
+            id={`simple-tabpanel-0`}
+            className={'simple-tabpanel'}
+            aria-labelledby={`simple-tab-0`}
+            style={bottomNav !== 0 ? {display: 'none'} : {}}
+          >
           <IndexPage /> 
         </div>
 
@@ -242,9 +265,11 @@ export default function App() {
           id={`simple-tabpanel-1`}
           className={'simple-tabpanel article-show'}
           aria-labelledby={`simple-tab-1`}
-          style={bottomNav !== 1 ? {display: 'none'} : {}}
+          style={{
+            display: bottomNav !== 1 ? 'none' : 'block'
+          }}
         >
-          <ArticleShow /> 
+          <ArticleShow onClick={onArticleClick} /> 
         </div>
 
 
@@ -260,7 +285,7 @@ export default function App() {
         </div>
       </div>
 
-        <BtmNav onChange={onNavChange} value={bottomNav} />
+        {showBarNavRef.current && <BtmNav onChange={onNavChange} value={bottomNav} /> }
         
     </Container>
     </>

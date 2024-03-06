@@ -9,22 +9,29 @@
   overflow: hidden;
 }
 
-.content .simple-tabpanel{
+.content2 {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.simple-tabpanel{
   width: 100%;
   height: 100%;
   overflow: scroll;
 }
 
-.content .MuiContainer-root {
+
+.MuiContainer-root {
   padding-left: 0; 
   padding-right: 0;
 }
 
-.content h2 {
+.article-show h2 {
   text-align: center;
 }
 
-.content p {
+.article-show p {
   /* word-spacing: 1.5em; */
   line-height: 34px;
   font-size: 1.25em;

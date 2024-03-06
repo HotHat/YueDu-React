@@ -8,11 +8,13 @@ export default function Loading({isLoading}: {isLoading: boolean}) {
 
 	return (
 		<>
+		{isLoading &&
 		<div className='loading'>
 				<Box sx={{position: "absolute", top: "50%", left: "50%"}}>
 					<CircularProgress />
 				</Box>
 		</div>
+		}
 		</>
 	)
 
