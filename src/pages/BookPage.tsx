@@ -2,8 +2,12 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Loading from '../components/Loading';
 import axios from 'axios';
+import {
+	useNavigate 
+} from "react-router-dom";
 
 export default function BookPage() {
+	const navigate = useNavigate();
 	const [isLoading, setLoading] = React.useState(true)
 
 	React.useEffect(() => {
@@ -30,7 +34,10 @@ export default function BookPage() {
 			<p>
 			This is book description, a long desc
 			</p>
-			<Button variant="contained">开始阅读</Button>
+			<Button variant="contained" onClick={() => {
+				console.log('reading button click');
+				return navigate('/category')
+			}}>开始阅读</Button>
 		</div>
 
 		</>
