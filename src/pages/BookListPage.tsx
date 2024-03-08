@@ -17,6 +17,12 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import styles from './book-list.module.scss'
 
+function truncateString(str:string, maxLength:number=20) { 
+	if (str.length > maxLength) { 
+			return str.substring(0, maxLength - 3) + '...'; 
+	} 
+	return str; 
+} 
 
 function BookItem() {
 	return (
@@ -26,8 +32,9 @@ function BookItem() {
 				<img src='https://img0.baidu.com/it/u=3194659325,3532417802&fm=253&fmt=auto&app=138&f=JPEG?w=512&h=500' />
 			</div>
 			<div className={styles['book-info']}>
-				<h1>book title base style book info long test</h1>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet</p>
+				<h1>{truncateString('book title base style book info long test', 35)}</h1>
+				<h2>author: lyh<i>2024-02-29</i></h2>
+				<p>{truncateString('Lorem ipsum dolor sit amet, consectetur adipisicing elit.Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet', 63)}</p>
 			</div>
 		</div>
 		</>
