@@ -1,0 +1,38 @@
+
+.book-item {
+	display: flex;
+	flex-direction: row;
+
+}
+
+.book-img {
+	flex-basis: 100px;
+	// width: 100px; 
+	// height: 100px;
+	img {
+		width: 100px;
+		height: 100px;
+	}
+
+}
+
+.book-info {
+	padding: 0 10px;
+	overflow: hidden;
+	h1 {
+		display: block;
+		width: 240px;
+		margin: 0;
+		font-size: 1.25em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	p {
+		margin: 0;
+		height: 68px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 24px;
+	}
+}

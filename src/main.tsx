@@ -10,6 +10,7 @@ import {
 import theme from './theme';
 import App from './App';
 import Category from './pages/CategoryPage';
+import BookList from './pages/BookListPage';
 import KeepAlive from './keep-alive';
 
 
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: "/category",
         element: <Category />,
+      },
+      {
+        path: "/book/list",
+        element: <BookList />,
       },
     ]
   },

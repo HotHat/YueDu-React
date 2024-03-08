@@ -15,14 +15,24 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import styles from './book-list.module.scss'
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
+
+function BookItem() {
+	return (
+		<>
+		<div className={styles['book-item']}>
+			<div className={styles['book-img']}>
+				<img src='https://img0.baidu.com/it/u=3194659325,3532417802&fm=253&fmt=auto&app=138&f=JPEG?w=512&h=500' />
+			</div>
+			<div className={styles['book-info']}>
+				<h1>book title base style book info long test</h1>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet</p>
+			</div>
+		</div>
+		</>
+	)
+}
 
 export default function CategoryPage() {
 	const navigate = useNavigate();
@@ -44,24 +54,24 @@ export default function CategoryPage() {
             <ArrowBackIosIcon/>
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-						分类
+						某某分类
           </Typography>
         </Toolbar>
       </AppBar>
     </Box>
     <Container maxWidth="sm" style={{marginTop: 16}}>
 			<Grid container spacing={1}>
-				<Grid xs={6}>
-					<Item>xs=6</Item>
+				<Grid xs={12}>
+					<BookItem />
 				</Grid>
-				<Grid xs={6}>
-					<Item>xs=6</Item>
+				<Grid xs={12}>
+					<BookItem />
 				</Grid>
-				<Grid xs={6}>
-					<Item>xs=6</Item>
+				<Grid xs={12}>
+					<BookItem />
 				</Grid>
-				<Grid xs={6}>
-					<Item>xs=6</Item>
+				<Grid xs={12}>
+					<BookItem />
 				</Grid>
 			</Grid>
 		</Container>
