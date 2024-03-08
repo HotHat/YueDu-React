@@ -10,7 +10,9 @@ import {
 import theme from './theme';
 import App from './App';
 import Category from './pages/CategoryPage';
+import Article from './pages/ArticlePage';
 import BookList from './pages/BookListPage';
+import Book from './pages/BookPage';
 import KeepAlive from './keep-alive';
 
 
@@ -28,8 +30,16 @@ const router = createBrowserRouter([
         element: <Category />,
       },
       {
-        path: "/book/list",
+        path: "/book/list/:catId",
         element: <BookList />,
+      },
+      {
+        path: "/book/:bookId",
+        element: <Book />,
+      },
+      {
+        path: "/book/article/:bookId/:chapterId",
+        element: <Article />,
       },
     ]
   },

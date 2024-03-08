@@ -3,14 +3,19 @@ import Button from '@mui/material/Button';
 import Loading from '../components/Loading';
 import axios from 'axios';
 import {
-	useNavigate 
+	useNavigate, useParams
 } from "react-router-dom";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import AppBar from '../components/AppBar'
 
 export default function BookPage() {
 	const navigate = useNavigate();
+	const {bookId} = useParams();
 	const [isLoading, setLoading] = React.useState(true)
 
+
 	React.useEffect(() => {
+		console.log('book id:', bookId)
 		axios.get('https://api.npms.io/v2/search?q=react')
 		.then((response) => {
 
@@ -25,6 +30,8 @@ export default function BookPage() {
 
 		<Loading isLoading={isLoading} />
 
+		<AppBar onClick={() => {return navigate(-1)}} title='详情' icon={<ArrowBackIosIcon />} />
+
 		<div className='book-img'>
 			<img style={{height:350, width: "100%"}} src="https://t7.baidu.com/it/u=91673060,7145840&fm=193&f=GIF" />
 		</div>
@@ -36,7 +43,7 @@ export default function BookPage() {
 			</p>
 			<Button variant="contained" onClick={() => {
 				console.log('reading button click');
-				return navigate('/category')
+				return navigate(`/book/article/${bookId}/1`)
 			}}>开始阅读</Button>
 		</div>
 

@@ -8,10 +8,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 
-export default function ButtonAppBar({setState}: any) {
-  const click = (event: any) => {
-    setState(true)
-  }
+export default function ButtonAppBar({onClick, icon, title }: any) {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -23,14 +20,13 @@ export default function ButtonAppBar({setState}: any) {
             color="inherit"
             aria-label="menu"
             sx={{ mr: 2 }}
-            onClick={click}
+            onClick={onClick}
           >
-            <MenuIcon />
+            {icon}
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
+            {title}
           </Typography>
-          <Button color="inherit">Login</Button>
         </Toolbar>
       </AppBar>
     </Box>

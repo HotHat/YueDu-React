@@ -27,43 +27,25 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function CategoryPage() {
 	const navigate = useNavigate();
 
+	const categoryList = [
+		{id: 1, title:"分类1"},
+		{id: 2, title:"分类2"},
+		{id: 3, title:"分类3"},
+		{id: 4, title:"分类4"},
+		{id: 5, title:"分类5"},
+		{id: 6, title:"分类6"},
+	]
+
 	return (
 		<>
-		<Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar >
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-						style={{marginRight: 0}}
-            sx={{ mr: 2 }}
-						onClick={() => {return navigate('/')}}
-          >
-            <ArrowBackIosIcon/>
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-						分类
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    </Box>
-    <Container maxWidth="sm" style={{marginTop: 16}}>
+		<Container maxWidth="sm" style={{marginTop: 16}}>
 			<Grid container spacing={1}>
-				<Grid xs={6}>
-					<Item>xs=6</Item>
+				{
+					categoryList.map((it) => {
+							return <Grid xs={6}><Button style={{width:'100%'}} variant="text" onClick={()=> navigate(`/book/list/${it.id}`) }>{it.title}</Button></Grid>
+					})
+				}
 				</Grid>
-				<Grid xs={6}>
-					<Item>xs=6</Item>
-				</Grid>
-				<Grid xs={6}>
-					<Item>xs=6</Item>
-				</Grid>
-				<Grid xs={6}>
-					<Item>xs=6</Item>
-				</Grid>
-			</Grid>
 		</Container>
 		</>
 	)
