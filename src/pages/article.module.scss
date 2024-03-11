@@ -52,7 +52,7 @@
 }
 
 .pullup-wrapper {
-    height: 100%;
+    height: calc(100vh);
     padding: 0 10px;
     border: 1px solid #ccc;
     overflow: hidden;

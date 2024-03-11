@@ -10,9 +10,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import styles from './article.module.scss'
 import BScroll from '@better-scroll/core'
 import PullUp from '@better-scroll/pull-up'
-import PullDown from '@better-scroll/pull-down'
+// import PullDown from '@better-scroll/pull-down'
 BScroll.use(PullUp)
-BScroll.use(PullDown)
+// BScroll.use(PullDown)
 
 
 
@@ -47,6 +47,15 @@ type ChapterType = {
   content: Array<string>
 }
 
+function sleepAsync(fun: () => void, sec: number) {
+  return new Promise((resolve) => {
+      setTimeout(() => {
+          fun()
+          resolve(true)
+      }, sec * 1000)
+  })
+}
+
 export default function ArticlePage() {
 
 	const {bookId, chapterId} = useParams();
@@ -60,6 +69,7 @@ export default function ArticlePage() {
   const [ reachBottom, setReachBottom ] = React.useState(false);
   const [drawerState, setDrawerState] = React.useState(false)
   const [isPullUpLoad, setPullUpLoad] = React.useState(false)
+  const scrollRef = React.useRef(null)
 
   let chapter = {
     title: '这里是很长的标题哦~~1111',
@@ -73,21 +83,31 @@ export default function ArticlePage() {
   let fetchNextPage = () => {
       setPullUpLoad(true)
       console.log('better scroll pull up~~~ event trigger')
-      axios.get('https://api.npms.io/v2/search?q=react')
-      .then((response) => {
-        console.log('bs resp loading: ', loadingRef.current)
-        console.log('bf request', chapterList)
+      sleepAsync(() => {
         setChapterList((old) => [
           ...old,
           chapter
         ])
-        console.log(chapterList)
-      }).finally(() => {
 
-        console.log('bs finally loading: ', loadingRef.current)
-        bs.refresh()
+        bs.finishPullUp()
         setPullUpLoad(false)
-      })
+      }, 3)
+      // axios.get('https://api.npms.io/v2/search?q=react')
+      // .then((response) => {
+      //   console.log('bs resp loading: ', loadingRef.current)
+      //   console.log('bf request', chapterList)
+      //   setChapterList((old) => [
+      //     ...old,
+      //     chapter
+      //   ])
+      //   console.log(chapterList)
+      // }).finally(() => {
+
+      //   console.log('bs finally loading: ', loadingRef.current)
+      //   bs.finishPullUp()
+      //   bs.refresh()
+      //   setPullUpLoad(false)
+      // })
   }
 
 	const onArticleClick = (event: Event) => {
@@ -99,25 +119,30 @@ export default function ArticlePage() {
   let bs: any;
   React.useEffect(() => {
       console.log('init~~~~~~~~~~~~')
-      bs = new BScroll('#scroll-wrapper', {
-        pullUpLoad: {threshold: 64}, 
-        pullDownRefresh: true}
-      )
+      // fetchNextPage()
+      // fetchNextPage()
+      // setTimeout(() => {
+        console.log('scroll ref', scrollRef.current)
+        bs = new BScroll(scrollRef.current, {
+          pullUpLoad: true, 
+        })
+      // }, 20)
 
-      bs.on('pullingDown', () => {
-        console.log('better scroll pull down event trigger')
-        bs.finishPullDown()
-      })
+      // bs.on('pullingDown', () => {
+      //   console.log('better scroll pull down event trigger')
+      //   bs.finishPullDown()
+      // })
       bs.on('pullingUp', () => {
         fetchNextPage()
-        bs.finishPullUp()
+        // bs.finishPullUp()
+        bs.refresh()
       })
 
   }, [])
 
 
   React.useEffect(() => {
-
+      console.log('chapter list update', chapterList)
   }, [chapterList])
   
 
@@ -130,30 +155,26 @@ export default function ArticlePage() {
         >
 	</SwipeableDrawer >
 	<AppBar onClick={() => {setDrawerState(true)} } icon={<MenuIcon />} title={'某某书'} /> 
-	<Container maxWidth="sm" style={{'paddingLeft': 0, 'paddingRight': 0}}>
-		<div className={styles['pullup-wrapper']} id='scroll-wrapper' >
+  <div className={styles['pullup-wrapper']} ref={scrollRef} >
 
-      <div className="pullup-content">
-        <ul className={styles["pullup-list"]}>
-          <Article chapters={chapterList} />
-        </ul>
+    <div className="pullup-content">
+      <ul className={styles["pullup-list"]}>
+        <Article chapters={chapterList} />
+      </ul>
 
-        <div className={styles["pullup-tips"]}>
-            {!isPullUpLoad && <div v-if="!isPullUpLoad" className="before-trigger">
-              <span className="pullup-txt">Pull up and load more</span>
-            </div>
-            }
-            {isPullUpLoad && <div v-else className="after-trigger">
-              <span className="pullup-txt">Loading...</span>
-            </div>
-            }
-        </div>
-
+      <div className={styles["pullup-tips"]}>
+          {!isPullUpLoad && <div className="before-trigger">
+            <span className="pullup-txt">Pull up and load more</span>
+          </div>
+          }
+          {isPullUpLoad && <div className="after-trigger">
+            <span className="pullup-txt">Loading...</span>
+          </div>
+          }
       </div>
-      
-        
-		</div>
 
-	</Container>
+    </div>
+  </div>
+
 	</>)
 }
