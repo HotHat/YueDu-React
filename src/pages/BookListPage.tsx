@@ -48,18 +48,13 @@ export default function CategoryPage() {
 		<AppBar onClick={() => {return navigate('/')}} title='某某分类' icon={<ArrowBackIosIcon />} />
 		<Container maxWidth="sm" style={{marginTop: 16}}>
 			<Grid container spacing={1}>
-				<Grid xs={12}>
-					<BookItem id={1} />
-				</Grid>
-				<Grid xs={12}>
-					<BookItem id={2}/>
-				</Grid>
-				<Grid xs={12}>
-					<BookItem id={3}/>
-				</Grid>
-				<Grid xs={12}>
-					<BookItem id={4} />
-				</Grid>
+				{
+					[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(function (it) { return (
+					<Grid xs={12}>
+						<BookItem id={it} />
+					</Grid>
+					)})
+				}
 			</Grid>
 		</Container>
 		</>

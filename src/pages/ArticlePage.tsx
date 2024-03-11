@@ -59,6 +59,7 @@ export default function ArticlePage() {
   // const { reachBottom, setReachBottom } = useContainerScroll(parentClass);
   const [ reachBottom, setReachBottom ] = React.useState(false);
   const [drawerState, setDrawerState] = React.useState(false)
+  const [isPullUpLoad, setPullUpLoad] = React.useState(false)
 
   let chapter = {
     title: '这里是很长的标题哦~~1111',
@@ -70,27 +71,23 @@ export default function ArticlePage() {
   }
 
   let fetchNextPage = () => {
-    if (!loadingRef.current ) {
-      loadingRef.current = true
-      // pageNum += 1;
-      // .... fetch page data ...
+      setPullUpLoad(true)
+      console.log('better scroll pull up~~~ event trigger')
       axios.get('https://api.npms.io/v2/search?q=react')
       .then((response) => {
-        console.log('resp loading: ', loadingRef.current)
-        setChapterList([
-          ...chapterList,
+        console.log('bs resp loading: ', loadingRef.current)
+        console.log('bf request', chapterList)
+        setChapterList((old) => [
+          ...old,
           chapter
         ])
         console.log(chapterList)
       }).finally(() => {
-        // setLoading(false)
-        loadingRef.current = false
-        // important
-        setReachBottom(false)
 
-        console.log('finally loading: ', loadingRef.current)
+        console.log('bs finally loading: ', loadingRef.current)
+        bs.refresh()
+        setPullUpLoad(false)
       })
-    }
   }
 
 	const onArticleClick = (event: Event) => {
@@ -99,32 +96,20 @@ export default function ArticlePage() {
 
   // let bs = new BetterScroll('#scroll-content', {pullUpLoad: true})
 
+  let bs: any;
   React.useEffect(() => {
       console.log('init~~~~~~~~~~~~')
-      let bs = new BScroll('#scroll-wrapper', {pullUpLoad: true, pullDownRefresh: true})
+      bs = new BScroll('#scroll-wrapper', {
+        pullUpLoad: {threshold: 64}, 
+        pullDownRefresh: true}
+      )
+
       bs.on('pullingDown', () => {
         console.log('better scroll pull down event trigger')
         bs.finishPullDown()
       })
       bs.on('pullingUp', () => {
-        console.log('better scroll pull up~~~ event trigger')
-        axios.get('https://api.npms.io/v2/search?q=react')
-        .then((response) => {
-          console.log('bs resp loading: ', loadingRef.current)
-          console.log('bf request', chapterList)
-          setChapterList((old) => [
-            ...old,
-            chapter
-          ])
-          console.log(chapterList)
-        }).finally(() => {
-          // setLoading(false)
-          loadingRef.current = false
-          // important
-
-          console.log('bs finally loading: ', loadingRef.current)
-          bs.refresh()
-        })
+        fetchNextPage()
         bs.finishPullUp()
       })
 
@@ -132,8 +117,7 @@ export default function ArticlePage() {
 
 
   React.useEffect(() => {
-      console.log('do after update')
-      console.log('after update:', chapterList)
+
   }, [chapterList])
   
 
@@ -147,25 +131,27 @@ export default function ArticlePage() {
 	</SwipeableDrawer >
 	<AppBar onClick={() => {setDrawerState(true)} } icon={<MenuIcon />} title={'某某书'} /> 
 	<Container maxWidth="sm" style={{'paddingLeft': 0, 'paddingRight': 0}}>
-		<div className={styles.content} id='scroll-wrapper' >
-        <div className="pulldown-scroller">
-          <div className="pulldown-wrapper">
-            <div v-show="beforePullDown">
-              <span>Pull Down and refresh</span>
-            </div>
-            <div v-show="!beforePullDown">
-              <div v-show="isPullingDown">
-                <span>Loading...</span>
-              </div>
-              <div v-show="!isPullingDown">
-                <span>Refresh success</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <ul className="pulldown-list">
+		<div className={styles['pullup-wrapper']} id='scroll-wrapper' >
+
+      <div className="pullup-content">
+        <ul className={styles["pullup-list"]}>
           <Article chapters={chapterList} />
         </ul>
+
+        <div className={styles["pullup-tips"]}>
+            {!isPullUpLoad && <div v-if="!isPullUpLoad" className="before-trigger">
+              <span className="pullup-txt">Pull up and load more</span>
+            </div>
+            }
+            {isPullUpLoad && <div v-else className="after-trigger">
+              <span className="pullup-txt">Loading...</span>
+            </div>
+            }
+        </div>
+
+      </div>
+      
+        
 		</div>
 
 	</Container>

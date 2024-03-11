@@ -27,14 +27,17 @@ const Item = styled(Paper)(({ theme }) => ({
 export default function CategoryPage() {
 	const navigate = useNavigate();
 
-	const categoryList = [
-		{id: 1, title:"分类1"},
-		{id: 2, title:"分类2"},
-		{id: 3, title:"分类3"},
-		{id: 4, title:"分类4"},
-		{id: 5, title:"分类5"},
-		{id: 6, title:"分类6"},
-	]
+	const categoryList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(function (it) { return {
+		id: it, title:"分类" + it
+	}});
+	// [
+	// 	{id: 1, title:"分类1"},
+	// 	{id: 2, title:"分类2"},
+	// 	{id: 3, title:"分类3"},
+	// 	{id: 4, title:"分类4"},
+	// 	{id: 5, title:"分类5"},
+	// 	{id: 6, title:"分类6"},
+	// ]
 
 	return (
 		<>

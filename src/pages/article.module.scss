@@ -25,6 +25,12 @@
   border: 1px solid #ccc;
   overflow: hidden
 }
+.pulldown-wrapper {
+  position: absolute;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
 .pulldown-list {
   padding: 0
 }
@@ -44,3 +50,32 @@
   text-align: center;
   color: #999
 }
+
+.pullup-wrapper {
+    height: 100%;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+
+    .pullup-content {
+      .pullup-list {
+          padding: 0;
+
+          ul {
+            padding-left:0;
+
+            li {
+              list-style: none;
+            }
+          }
+      }
+    }
+    
+
+    .pullup-tips {
+      padding: 20px;
+      text-align: center;
+      color: #999
+    }
+}
+
