@@ -1,7 +1,7 @@
 
 .content {
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 56px);
   overflow-y: scroll;
   h2 {
     text-align: center;
@@ -12,4 +12,35 @@
     font-size: 1.25em;
     letter-spacing: 1px;
   }
+}
+
+.pulldown {
+  height: 100%
+}
+
+.pulldown-bswrapper {
+  position: relative;
+  height: 100%;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  overflow: hidden
+}
+.pulldown-list {
+  padding: 0
+}
+
+.pulldown-list-item {
+  padding: 10px 0;
+  list-style: none;
+  border-bottom: 1px solid #ccc
+}
+
+.pulldown-wrapper {
+  position: absolute;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  transform: translateY(-100%) translateZ(0);
+  text-align: center;
+  color: #999
 }

@@ -8,15 +8,21 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import AppBar from '../components/AppBar'
 import MenuIcon from '@mui/icons-material/Menu';
 import styles from './article.module.scss'
+import BScroll from '@better-scroll/core'
+import PullUp from '@better-scroll/pull-up'
+import PullDown from '@better-scroll/pull-down'
+BScroll.use(PullUp)
+BScroll.use(PullDown)
+
 
 
 function Article({chapters}: any) {
   
   return (
     <>
-    {chapters && chapters.map((it: ChapterType, index:number) => {
-			return <Chapter key={index} title={it.title} content={it.content} />
-		})}
+      {chapters && chapters.map((it: ChapterType, index:number) => {
+        return <Chapter key={index} title={it.title} content={it.content} />
+      })}
     </>
   )
 }
@@ -29,10 +35,10 @@ function Chapter({title, content}: any) {
       body.push(<p key={key}>{val}</p>)
   }
   return (
-    <>
+    <li>
     <h2>{title}</h2>
     {body}
-    </>
+    </li>
   )
 }
 
@@ -50,7 +56,8 @@ export default function ArticlePage() {
   const [loading, setLoading] = React.useState(false);
   let loadingRef = React.useRef(false)
   let parentClass = '#scroll-content';
-  const { reachBottom, setReachBottom } = useContainerScroll(parentClass);
+  // const { reachBottom, setReachBottom } = useContainerScroll(parentClass);
+  const [ reachBottom, setReachBottom ] = React.useState(false);
   const [drawerState, setDrawerState] = React.useState(false)
 
   let chapter = {
@@ -90,22 +97,44 @@ export default function ArticlePage() {
     console.log('article content click')
   }
 
+  // let bs = new BetterScroll('#scroll-content', {pullUpLoad: true})
+
   React.useEffect(() => {
-    console.log('Article Show component did mount!!!');
-    let p = document.querySelector(parentClass)
-    p?.addEventListener('click', onArticleClick)
+      console.log('init~~~~~~~~~~~~')
+      let bs = new BScroll('#scroll-wrapper', {pullUpLoad: true, pullDownRefresh: true})
+      bs.on('pullingDown', () => {
+        console.log('better scroll pull down event trigger')
+        bs.finishPullDown()
+      })
+      bs.on('pullingUp', () => {
+        console.log('better scroll pull up~~~ event trigger')
+        axios.get('https://api.npms.io/v2/search?q=react')
+        .then((response) => {
+          console.log('bs resp loading: ', loadingRef.current)
+          console.log('bf request', chapterList)
+          setChapterList((old) => [
+            ...old,
+            chapter
+          ])
+          console.log(chapterList)
+        }).finally(() => {
+          // setLoading(false)
+          loadingRef.current = false
+          // important
 
-    if ((reachBottom && !loadingRef.current) || chapterList.length == 0) {
-			console.log('request article content')
-      fetchNextPage();
-    }
+          console.log('bs finally loading: ', loadingRef.current)
+          bs.refresh()
+        })
+        bs.finishPullUp()
+      })
 
-    return () => {
-      console.log('Article Show component unmount!!!');
-      p?.removeEventListener('click', onArticleClick)
-    }
+  }, [])
 
-  }, [reachBottom])
+
+  React.useEffect(() => {
+      console.log('do after update')
+      console.log('after update:', chapterList)
+  }, [chapterList])
   
 
   return (<>
@@ -118,8 +147,25 @@ export default function ArticlePage() {
 	</SwipeableDrawer >
 	<AppBar onClick={() => {setDrawerState(true)} } icon={<MenuIcon />} title={'某某书'} /> 
 	<Container maxWidth="sm" style={{'paddingLeft': 0, 'paddingRight': 0}}>
-		<div className={styles.content} id='scroll-content'>
-			<Article chapters={chapterList} />
+		<div className={styles.content} id='scroll-wrapper' >
+        <div className="pulldown-scroller">
+          <div className="pulldown-wrapper">
+            <div v-show="beforePullDown">
+              <span>Pull Down and refresh</span>
+            </div>
+            <div v-show="!beforePullDown">
+              <div v-show="isPullingDown">
+                <span>Loading...</span>
+              </div>
+              <div v-show="!isPullingDown">
+                <span>Refresh success</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ul className="pulldown-list">
+          <Article chapters={chapterList} />
+        </ul>
 		</div>
 
 	</Container>
