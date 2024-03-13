@@ -1,77 +1,12 @@
 
-.content {
-  width: 100%;
-  height: calc(100vh - 56px);
-  overflow-y: scroll;
-  h2 {
-    text-align: center;
-  }
 
-  p {
-    line-height: 34px;
-    font-size: 1.25em;
-    letter-spacing: 1px;
-  }
-}
-
-.pulldown {
-  height: 100%
-}
-
-.pulldown-bswrapper {
-  position: relative;
-  height: 100%;
-  padding: 0 10px;
-  border: 1px solid #ccc;
-  overflow: hidden
-}
-.pulldown-wrapper {
-  position: absolute;
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-}
-.pulldown-list {
-  padding: 0
-}
-
-.pulldown-list-item {
-  padding: 10px 0;
-  list-style: none;
-  border-bottom: 1px solid #ccc
-}
-
-.pulldown-wrapper {
-  position: absolute;
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  transform: translateY(-100%) translateZ(0);
-  text-align: center;
-  color: #999
-}
-
-.pullup-wrapper {
-    height: calc(100vh);
+.pull-wrapper {
+    height: calc(100vh - 56px);
     padding: 0 10px;
     border: 1px solid #ccc;
-    overflow: hidden;
+    overflow-y: hidden;
 
-    .pullup-content {
-      .pullup-list {
-          padding: 0;
-
-          ul {
-            padding-left:0;
-
-            li {
-              list-style: none;
-            }
-          }
-      }
-    }
     
-
     .pullup-tips {
       padding: 20px;
       text-align: center;
@@ -79,3 +14,23 @@
     }
 }
 
+.pull-content {
+  position: relative; 
+  top: 0;
+  left: 0;
+  z-index: 20;
+}
+
+.pull-indicator {
+  position: absolute;
+  top: 76px;
+  left: 0;
+  width: 100%;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-lighter);
+  transition: transform 0.2s ease-in-out;
+  z-index: 10;
+}

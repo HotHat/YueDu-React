@@ -9,9 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@better-scroll/core": "^2.5.1",
-    "@better-scroll/pull-down": "^2.5.1",
-    "@better-scroll/pull-up": "^2.5.1",
     "@emotion/react": "latest",
     "@emotion/styled": "latest",
     "@mui/icons-material": "^5.15.11",
@@ -27,6 +24,7 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@vitejs/plugin-react": "latest",
+    "less": "^4.2.0",
     "sass": "^1.71.0",
     "typescript": "latest",
     "vite": "latest"

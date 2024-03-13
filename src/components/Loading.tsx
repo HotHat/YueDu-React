@@ -1,7 +1,7 @@
 import * as React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import './loading.scss'
+import styles from './loading.module.scss'
 
 
 export default function Loading({isLoading}: {isLoading: boolean}) {
@@ -9,7 +9,7 @@ export default function Loading({isLoading}: {isLoading: boolean}) {
 	return (
 		<>
 		{isLoading &&
-		<div className='loading'>
+		<div className={styles.loading}>
 				<Box sx={{position: "absolute", top: "50%", left: "50%"}}>
 					<CircularProgress />
 				</Box>

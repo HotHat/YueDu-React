@@ -3,16 +3,13 @@ import * as React from 'react';
 import useContainerScroll from '../useContainerScroll'
 import axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
-import Container from '@mui/material/Container';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import AppBar from '../components/AppBar'
 import MenuIcon from '@mui/icons-material/Menu';
 import styles from './article.module.scss'
-import BScroll from '@better-scroll/core'
-import PullUp from '@better-scroll/pull-up'
-// import PullDown from '@better-scroll/pull-down'
-BScroll.use(PullUp)
-// BScroll.use(PullDown)
+import XYPullUp from '../components/usePullToRefresh';
+// import Tloader from '../components/react-touch-loader';
+// import ScrollView from 'react-fast-scroll';
 
 
 
@@ -66,10 +63,12 @@ export default function ArticlePage() {
   let loadingRef = React.useRef(false)
   let parentClass = '#scroll-content';
   // const { reachBottom, setReachBottom } = useContainerScroll(parentClass);
-  const [ reachBottom, setReachBottom ] = React.useState(false);
+  // const [ reachBottom, setReachBottom ] = React.useState(false);
   const [drawerState, setDrawerState] = React.useState(false)
-  const [isPullUpLoad, setPullUpLoad] = React.useState(false)
+  // const [isPullUpLoad, setPullUpLoad] = React.useState(false)
   const scrollRef = React.useRef(null)
+
+  // usePullToRefresh(scrollRef, () => {console.log('pull to refresh action')})
 
   let chapter = {
     title: '这里是很长的标题哦~~1111',
@@ -81,7 +80,7 @@ export default function ArticlePage() {
   }
 
   let fetchNextPage = () => {
-      setPullUpLoad(true)
+      // setPullUpLoad(true)
       console.log('better scroll pull up~~~ event trigger')
       sleepAsync(() => {
         setChapterList((old) => [
@@ -89,8 +88,8 @@ export default function ArticlePage() {
           chapter
         ])
 
-        bs.finishPullUp()
-        setPullUpLoad(false)
+        // bs.finishPullUp()
+        // setPullUpLoad(false)
       }, 3)
       // axios.get('https://api.npms.io/v2/search?q=react')
       // .then((response) => {
@@ -110,40 +109,65 @@ export default function ArticlePage() {
       // })
   }
 
-	const onArticleClick = (event: Event) => {
-    console.log('article content click')
-  }
+	// const onArticleClick = (event: Event) => {
+    // console.log('article content click')
+  // }
 
   // let bs = new BetterScroll('#scroll-content', {pullUpLoad: true})
 
-  let bs: any;
   React.useEffect(() => {
       console.log('init~~~~~~~~~~~~')
+      fetchNextPage()
       // fetchNextPage()
+      // fetchNextPage()
+
+
+
       // fetchNextPage()
       // setTimeout(() => {
-        console.log('scroll ref', scrollRef.current)
-        bs = new BScroll(scrollRef.current, {
-          pullUpLoad: true, 
-        })
-      // }, 20)
-
-      // bs.on('pullingDown', () => {
-      //   console.log('better scroll pull down event trigger')
-      //   bs.finishPullDown()
+      //   console.log('scroll ref', scrollRef.current)
+      //   bs = new BScroll(scrollRef.current, {
+      //     pullUpLoad: {threshold: 64}, 
+      //   })
+    
+      // bs.on('pullingUp', () => {
+      //   console.log('do pulling up action')
+      //   fetchNextPage()
+      //   // bs.finishPullUp()
+      //   bs.refresh()
       // })
-      bs.on('pullingUp', () => {
-        fetchNextPage()
-        // bs.finishPullUp()
-        bs.refresh()
-      })
 
   }, [])
 
 
   React.useEffect(() => {
       console.log('chapter list update', chapterList)
+
   }, [chapterList])
+  let refresh = () =>{
+    return new Promise((resolve: any) => {
+      setTimeout(() => {
+        setChapterList([])  
+
+        fetchNextPage();
+
+        resolve();
+   
+      }, 100);
+    })
+  } 
+
+  let loadMore = () =>{
+    // return new Promise((resolve: any) => {
+      setTimeout(() => {
+
+        fetchNextPage();
+
+        // resolve(true);
+   
+      }, 100);
+    // })
+  } 
   
 
   return (<>
@@ -155,25 +179,15 @@ export default function ArticlePage() {
         >
 	</SwipeableDrawer >
 	<AppBar onClick={() => {setDrawerState(true)} } icon={<MenuIcon />} title={'某某书'} /> 
-  <div className={styles['pullup-wrapper']} ref={scrollRef} >
+  <div className={styles['pull-wrapper']} >
 
-    <div className="pullup-content">
-      <ul className={styles["pullup-list"]}>
-        <Article chapters={chapterList} />
-      </ul>
+    <XYPullUp onTrigger={loadMore} >
+      
+          <ul className={styles["pull-list"]}>
+            <Article chapters={chapterList} />
+          </ul>
+    </XYPullUp>
 
-      <div className={styles["pullup-tips"]}>
-          {!isPullUpLoad && <div className="before-trigger">
-            <span className="pullup-txt">Pull up and load more</span>
-          </div>
-          }
-          {isPullUpLoad && <div className="after-trigger">
-            <span className="pullup-txt">Loading...</span>
-          </div>
-          }
-      </div>
-
-    </div>
   </div>
 
 	</>)
