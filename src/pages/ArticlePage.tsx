@@ -7,7 +7,7 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import AppBar from '../components/AppBar'
 import MenuIcon from '@mui/icons-material/Menu';
 import styles from './article.module.scss'
-import XYPullUp from '../components/usePullToRefresh';
+import XYPullUp from '../components/PullToRefresh';
 // import Tloader from '../components/react-touch-loader';
 // import ScrollView from 'react-fast-scroll';
 
@@ -158,15 +158,15 @@ export default function ArticlePage() {
   } 
 
   let loadMore = () =>{
-    // return new Promise((resolve: any) => {
+    return new Promise((resolve: any) => {
       setTimeout(() => {
 
         fetchNextPage();
 
-        // resolve(true);
+        resolve(true);
    
       }, 100);
-    // })
+    })
   } 
   
 
