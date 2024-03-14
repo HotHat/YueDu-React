@@ -22,6 +22,7 @@ export default function XYPullUp({
 	const k = 0.4;
 
 	const ref:React.RefObject<HTMLDivElement> = useRef(null)
+	const scrollRef:React.RefObject<HTMLDivElement> = useRef(null)
 	const [state, setState] = useState('waiting')
 
 
@@ -80,7 +81,8 @@ export default function XYPullUp({
 			// get the difference
 			const dy = currentY - initialY;
 			// if (dy < 0) return;
-			if (dy > 0 && parentEl.scrollTop == 0) {
+			// console.log('el scroll top', el.scrollTop)
+			if (dy > 0 && el.scrollTop == 0) {
 				// update the element's transform
 				el.style.transform = `translateY(${appr(dy)}px)`;
 				
@@ -100,7 +102,7 @@ export default function XYPullUp({
 
 			} 
 			// bottom
-			else if (dy < 0 && parentEl.scrollTop + parentEl.clientHeight == parentEl.scrollHeight ) {
+			else if (dy < 0 && el.scrollTop + el.clientHeight == el.scrollHeight ) {
 				el.style.transform = `translateY(${-appr(-dy)}px)`;
 			}
 
@@ -128,7 +130,6 @@ export default function XYPullUp({
 
 			const y = endEvent.changedTouches[0].clientY;
 			const dy = y - initialY;
-			const pl = el.parentNode as HTMLDivElement;
 			
 			if (dy < TRIGGER_THRESHOLD) {
 				el.style.transform = `translateY(0px)`;
@@ -137,9 +138,9 @@ export default function XYPullUp({
 				changeState('flip', 'waiting')
 			}
 			// run the callback
-			if (dy > TRIGGER_THRESHOLD && pl.scrollTop == 0) {
+			if (dy > TRIGGER_THRESHOLD && el.scrollTop == 0) {
 				// return the element to its initial position
-				el.style.transform = `translateY(25px)`;
+				el.style.transform = `translateY(40px)`;
 				// add transition
 				el.style.transition = "transform 0.2s";
 				// el.classList.add('.pull-loading')
@@ -180,6 +181,8 @@ export default function XYPullUp({
 		// ref.current = document.querySelector('xy-pull-wrapper')
     const el = ref.current;
     if (!el) return;
+		const scroll = scrollRef.current as HTMLElement
+		console.log('scroll el', scroll)
 
 
 
@@ -188,12 +191,11 @@ export default function XYPullUp({
 		console.log('add touch start handle')
     el.addEventListener("touchstart", handleTouchStart);
 
-		const pl = el.parentNode as HTMLElement
-		pl.addEventListener('scroll', scrollHandle)
+		// scroll.parentNode?.addEventListener('scroll', scrollHandle)
 
 		function scrollHandle(event: Event) {
-			// const el = event.target as HTMLElement
-			// console.log(el.scrollTop)
+			const el = event.target as HTMLElement
+			console.log(el, el.scrollTop)
 			// scrollRef.current = el.scrollTop
 		}
 
@@ -205,7 +207,7 @@ export default function XYPullUp({
       // don't forget to cleanup
       el.removeEventListener("touchstart", handleTouchStart);
 
-			pl.removeEventListener('scroll', scrollHandle)
+			// scroll.parentNode?.removeEventListener('scroll', scrollHandle)
     };
   }, [ref.current]);
 
@@ -221,7 +223,15 @@ export default function XYPullUp({
 					</div>
 			</div>
 			<div className='xy-pull-content' ref={ref}>
-				{children}
+					{children}
+			</div>
+			<div className={`xy-up-indicator waiting`}>
+					<div className='xy-up-more '>
+							上拉加载更多
+					</div>
+					<div className='xy-loading'>
+							加载中...
+					</div>
 			</div>
 		</div>
 	</>

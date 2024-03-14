@@ -285,7 +285,7 @@
 .xy-pull-wrapper {
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
+  overflow: hidden;
 
   .xy-pull-indicator {
     width: 100%;
@@ -310,6 +310,10 @@
     position: relative;
     z-index: 20;
     background-color: #fff;
+    height: 100%;
+    left: 0;
+    top: 0;
+    overflow-y: scroll;
   }
 
   .waiting {
@@ -347,5 +351,22 @@
     margin: 0;
   }
 
+  .xy-up-indicator {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+
+    .waiting {
+      .xy-up-more {
+        display: block;
+      }
+      .xy-loading {
+        display: none;
+      }
+    }
+  }
 }
 
